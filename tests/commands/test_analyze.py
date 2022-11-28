@@ -44,7 +44,7 @@ def test_options_format_possible_values(config):
     parser = ArgumentParser()
     cmd.fill_parser(parser)
     (action,) = [action for action in parser._actions if action.dest == "format"]
-    assert action.choices == ["json"]
+    assert action.choices == ["json", "yaml"]
 
 
 def test_expanded_charm_basic(config, tmp_path, monkeypatch):

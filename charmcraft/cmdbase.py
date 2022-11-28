@@ -17,10 +17,13 @@
 """Infrastructure for common base commands functionality."""
 
 import json
+import yaml
 
 import craft_cli
 
 JSON_FORMAT = "json"
+YAML_FORMAT = "yaml"
+FORMAT_HELP_STR = "Produce the formatted result in the specified format ('json' or 'yaml')"
 
 
 class BaseCommand(craft_cli.BaseCommand):
@@ -43,12 +46,14 @@ class BaseCommand(craft_cli.BaseCommand):
         """Format the content."""
         if fmt == JSON_FORMAT:
             return json.dumps(content, indent=4)
+        elif fmt == YAML_FORMAT:
+            return yaml.dump(content, indent=4)
         raise ValueError("Specified format not supported.")
 
     def include_format_option(self, parser):
         """Add the 'format' option to this parser."""
         parser.add_argument(
             "--format",
-            choices=[JSON_FORMAT],
-            help="Produce the result formatted as a JSON string",
+            choices=[JSON_FORMAT, YAML_FORMAT],
+            help=FORMAT_HELP_STR,
         )

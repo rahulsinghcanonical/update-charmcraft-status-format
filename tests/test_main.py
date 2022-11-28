@@ -34,7 +34,7 @@ from craft_cli import (
 from craft_store.errors import CraftStoreError
 
 from charmcraft import __version__, env, utils
-from charmcraft.cmdbase import BaseCommand, JSON_FORMAT
+from charmcraft.cmdbase import BaseCommand, JSON_FORMAT, YAML_FORMAT, FORMAT_HELP_STR
 from charmcraft.commands.store.client import ALTERNATE_AUTH_ENV_VAR
 from charmcraft.main import COMMAND_GROUPS, main, _get_system_details
 
@@ -483,8 +483,8 @@ def test_basecommand_include_format_option(config):
     assert action.option_strings == ["--format"]
     assert action.dest == "format"
     assert action.default is None
-    assert action.choices == [JSON_FORMAT]
-    assert action.help == "Produce the result formatted as a JSON string"
+    assert action.choices == [JSON_FORMAT, YAML_FORMAT]
+    assert action.help == FORMAT_HELP_STR
 
 
 def test_basecommand_format_content_json(config):
@@ -498,6 +498,19 @@ def test_basecommand_format_content_json(config):
             "foo",
             "bar"
         ]"""
+    )
+
+
+def test_basecommand_format_content_yaml(config):
+    """Properly format content in YAML format."""
+    data = ["foo", "bar"]
+    cmd = MySimpleCommand(config)
+    result = cmd.format_content(YAML_FORMAT, data)
+    assert result == textwrap.dedent(
+        """\
+        - foo
+        - bar
+        """
     )
 
 
